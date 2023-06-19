@@ -1,0 +1,1 @@
+Cross platform application for firefly detection from video
