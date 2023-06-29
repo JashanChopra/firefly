@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firefly/camera_page.dart';
 
 void main() {
   runApp(const FlashFinderApp());
@@ -17,7 +18,8 @@ class FlashFinderApp extends StatelessWidget {
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         // useMaterial3: true,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Color.fromARGB(255, 20, 25, 43),
+        primaryColor: const Color.fromARGB(255, 20, 25, 43),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 20, 25, 43),
         fontFamily: 'Roboto',
       ),
       home: const Home(title: 'FlashFinder Home Page'),
@@ -25,9 +27,11 @@ class FlashFinderApp extends StatelessWidget {
   }
 }
 
+// TODO: create nested navigation flow so that top and bottom app bars remain static.
 class Home extends StatelessWidget {
   const Home({super.key, required this.title});
   final String title;
+  // This is the home page.
 
   @override
   Widget build(BuildContext context) {
@@ -54,24 +58,27 @@ class Home extends StatelessWidget {
 
 class TitleBar extends StatelessWidget {
   const TitleBar({super.key});
-
+  // This is the title bar.
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(32),
-      child: const Text('FlashFinder', style: TextStyle(fontSize: 32)),
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      bottomOpacity: 0,
+      elevation: 0,
+      title: const Text('FlashFinder', style: TextStyle(fontSize: 28)),
     );
   }
 }
 
 class RecordVideoButton extends StatelessWidget {
   const RecordVideoButton({super.key});
-
+  // This is the button to that takes you to the page to record video.
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print('RecordVideoButton was tapped!');
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const CameraPage()));
       },
       child: Container(
         height: 64,
@@ -79,7 +86,7 @@ class RecordVideoButton extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Colors.lightGreen[500],
+          color: const Color.fromARGB(255, 56, 92, 15),
         ),
         child: const Center(
           child: Text('Record Video',
@@ -92,7 +99,7 @@ class RecordVideoButton extends StatelessWidget {
 
 class UploadVideoButton extends StatelessWidget {
   const UploadVideoButton({super.key});
-
+  // This is the button that takes you to the page to upload video.
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -105,7 +112,7 @@ class UploadVideoButton extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Colors.lightGreen[500],
+          color: const Color.fromARGB(255, 56, 92, 15),
         ),
         child: const Center(
           child: Text('Upload Video',
@@ -118,12 +125,13 @@ class UploadVideoButton extends StatelessWidget {
 
 class HowItWorksButton extends StatelessWidget {
   const HowItWorksButton({super.key});
-
+  // This is the button that takes you to the how it works page.
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print('HowItWorksButton was tapped!');
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HowItWorksPage()));
       },
       child: Container(
         height: 64,
@@ -131,7 +139,7 @@ class HowItWorksButton extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Colors.lightGreen[500],
+          color: const Color.fromARGB(255, 56, 92, 15),
         ),
         child: const Center(
           child: Text('How It Works',
@@ -144,18 +152,188 @@ class HowItWorksButton extends StatelessWidget {
 
 class BottomButtonRow extends StatelessWidget {
   const BottomButtonRow({super.key});
-
-//Theme.of(context).primaryColor
+  // This is the bottom row of icons.
+  //Theme.of(context).primaryColor
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Icon(Icons.folder, color: Color.fromARGB(255, 219, 163, 163)),
-          Icon(Icons.emoji_nature, color: Color.fromARGB(255, 219, 163, 163)),
-          Icon(Icons.account_circle, color: Color.fromARGB(255, 219, 163, 163)),
+    return BottomAppBar(
+      color: Colors.transparent,
+      shadowColor: Colors.transparent,
+      child: IconTheme(
+        data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            IconButton(
+              tooltip: 'Saved videos',
+              icon: const Icon(Icons.folder),
+              onPressed: () {},
+            ),
+            IconButton(
+              tooltip: 'Fireflies',
+              icon: const Icon(Icons.emoji_nature),
+              onPressed: () {},
+            ),
+            IconButton(
+              tooltip: 'User info',
+              icon: const Icon(Icons.account_circle),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HowItWorksPage extends StatelessWidget {
+  const HowItWorksPage({super.key});
+  // This is the How It Works page.
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: <Widget>[
+          TitleBar(),
+          HowItWorksContent(),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: BottomButtonRow()))),
+        ],
+      ),
+    );
+  }
+}
+
+class HowItWorksContent extends StatelessWidget {
+  const HowItWorksContent({super.key});
+  // This is the text on the How It Works page.
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('lorem ipsum');
+  }
+}
+
+class RecordVideoPage extends StatelessWidget {
+  const RecordVideoPage({super.key});
+  // This is the Record Video page.
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: <Widget>[
+          TitleBar(),
+          RecordVideoContent(),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: BottomButtonRow()))),
+        ],
+      ),
+    );
+  }
+}
+
+class RecordVideoContent extends StatelessWidget {
+  const RecordVideoContent({super.key});
+  // This is the content on the Record Video page.
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const SubmitVideoPage()));
+      },
+      child: Container(
+        height: 64,
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromARGB(255, 56, 92, 15),
+        ),
+        child: const Center(
+          child: Text('Click here to record video',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        ),
+      ),
+    );
+  }
+}
+
+class SubmitVideoPage extends StatelessWidget {
+  const SubmitVideoPage({super.key});
+  // This is the page that lets the user submit the video to be classified.
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: <Widget>[
+          TitleBar(),
+          SubmitVideoContent(),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: BottomButtonRow()))),
+        ],
+      ),
+    );
+  }
+}
+
+class SubmitVideoContent extends StatelessWidget {
+  const SubmitVideoContent({super.key});
+  // This is the content on the Submit Video page
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ClassifyVideoPage()));
+      },
+      child: Container(
+        height: 64,
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromARGB(255, 56, 92, 15),
+        ),
+        child: const Center(
+          child: Text('Click here to classify video',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        ),
+      ),
+    );
+  }
+}
+
+class ClassifyVideoPage extends StatelessWidget {
+  const ClassifyVideoPage({super.key});
+  // This is the page that lets the user submit the video to be classified.
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: <Widget>[
+          TitleBar(),
+          Text('Classifying video...'),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: BottomButtonRow()))),
         ],
       ),
     );
