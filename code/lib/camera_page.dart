@@ -1,6 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:firefly/video_page.dart';
+import 'package:FlashFinder/video_page.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key? key}) : super(key: key);

@@ -1,7 +1,8 @@
 import 'dart:io';
-
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:FlashFinder/inference_page.dart';
 
 class VideoPage extends StatefulWidget {
   final String filePath;
@@ -28,6 +29,22 @@ class _VideoPageState extends State<VideoPage> {
     await _videoPlayerController.play();
   }
 
+  _saveVideoToGallery({required String videoPath}) async {
+    // var result =
+    var result =
+        await ImageGallerySaver.saveFile(videoPath, isReturnPathOfIOS: true);
+    // String iOSPath = result['filePath'];
+    final route = MaterialPageRoute(
+      fullscreenDialog: true,
+      builder: (_) =>
+          InferencePage(videoFile: videoPath), // or do we pass the file itself?
+    );
+    Navigator.push(context, route);
+
+    // String outputPath = result['filePath'];
+    // return outputPath;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,9 +55,9 @@ class _VideoPageState extends State<VideoPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.check),
-            onPressed: () {
-              print('do something with the file');
-            },
+            onPressed: () => _saveVideoToGallery(videoPath: widget.filePath),
+
+            // move to a new page where classification happens
           )
         ],
       ),
