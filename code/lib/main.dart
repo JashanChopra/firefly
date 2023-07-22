@@ -1,117 +1,184 @@
 import 'package:flutter/material.dart';
 import 'collections.dart';
+import 'camera_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const FlashFinderApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class FlashFinderApp extends StatelessWidget {
+  const FlashFinderApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'FlashFinder',
       theme: ThemeData(
         // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        // useMaterial3: true,
+        brightness: Brightness.dark,
+        primaryColor: const Color.fromARGB(255, 20, 25, 43),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 20, 25, 43),
+        fontFamily: 'Roboto',
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const Home(title: 'FlashFinder Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
+// TODO: create nested navigation flow so that top and bottom app bars remain static.
+class Home extends StatelessWidget {
+  const Home({super.key, required this.title});
   final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  // This is the home page.
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+    return const Scaffold(
+      body: Column(
+        children: <Widget>[
+          TitleBar(),
+          Padding(padding: EdgeInsets.all(32)),
+          Padding(padding: EdgeInsets.all(32), child: RecordVideoButton()),
+          Padding(padding: EdgeInsets.all(32), child: UploadVideoButton()),
+          Padding(padding: EdgeInsets.all(32), child: HowItWorksButton()),
+          Padding(padding: EdgeInsets.all(32)),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: BottomButtonRow()))),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
+    );
+  }
+}
+
+class TitleBar extends StatelessWidget {
+  const TitleBar({super.key});
+  // This is the title bar.
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      bottomOpacity: 0,
+      elevation: 0,
+      title: const Text('FlashFinder', style: TextStyle(fontSize: 28)),
+    );
+  }
+}
+
+class RecordVideoButton extends StatelessWidget {
+  const RecordVideoButton({super.key});
+  // This is the button to that takes you to the page to record video.
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const CameraPage()));
+      },
+      child: Container(
+        height: 64,
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromARGB(255, 56, 92, 15),
+        ),
+        child: const Center(
+          child: Text('Record Video',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        ),
+      ),
+    );
+  }
+}
+
+class UploadVideoButton extends StatelessWidget {
+  const UploadVideoButton({super.key});
+  // This is the button that takes you to the page to upload video.
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        print('UploadVideoButton was tapped!');
+      },
+      child: Container(
+        height: 64,
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromARGB(255, 56, 92, 15),
+        ),
+        child: const Center(
+          child: Text('Upload Video',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        ),
+      ),
+    );
+  }
+}
+
+class HowItWorksButton extends StatelessWidget {
+  const HowItWorksButton({super.key});
+  // This is the button that takes you to the how it works page.
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HowItWorksPage()));
+      },
+      child: Container(
+        height: 64,
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromARGB(255, 56, 92, 15),
+        ),
+        child: const Center(
+          child: Text('How It Works',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        ),
+      ),
+    );
+  }
+}
+
+class BottomButtonRow extends StatelessWidget {
+  const BottomButtonRow({super.key});
+  // This is the bottom row of icons.
+  //Theme.of(context).primaryColor
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      color: Colors.transparent,
+      shadowColor: Colors.transparent,
+      child: IconTheme(
+        data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            IconButton(
+              tooltip: 'Saved videos',
+              icon: const Icon(Icons.folder),
+              onPressed: () {},
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            IconButton(
+              tooltip: 'Fireflies',
+              icon: const Icon(Icons.emoji_nature),
+              onPressed: () {},
+            ),
+            IconButton(
+              tooltip: 'User info',
+              icon: const Icon(Icons.account_circle),
+              onPressed: () {},
             ),
             ElevatedButton(
                 onPressed: () {
@@ -125,11 +192,160 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class HowItWorksPage extends StatelessWidget {
+  const HowItWorksPage({super.key});
+  // This is the How It Works page.
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: <Widget>[
+          TitleBar(),
+          HowItWorksContent(),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: BottomButtonRow()))),
+        ],
+      ),
+    );
+  }
+}
+
+class HowItWorksContent extends StatelessWidget {
+  const HowItWorksContent({super.key});
+  // This is the text on the How It Works page.
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('lorem ipsum');
+  }
+}
+
+class RecordVideoPage extends StatelessWidget {
+  const RecordVideoPage({super.key});
+  // This is the Record Video page.
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: <Widget>[
+          TitleBar(),
+          RecordVideoContent(),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: BottomButtonRow()))),
+        ],
+      ),
+    );
+  }
+}
+
+class RecordVideoContent extends StatelessWidget {
+  const RecordVideoContent({super.key});
+  // This is the content on the Record Video page.
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const SubmitVideoPage()));
+      },
+      child: Container(
+        height: 64,
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromARGB(255, 56, 92, 15),
+        ),
+        child: const Center(
+          child: Text('Click here to record video',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        ),
+      ),
+    );
+  }
+}
+
+class SubmitVideoPage extends StatelessWidget {
+  const SubmitVideoPage({super.key});
+  // This is the page that lets the user submit the video to be classified.
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: <Widget>[
+          TitleBar(),
+          SubmitVideoContent(),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: BottomButtonRow()))),
+        ],
+      ),
+    );
+  }
+}
+
+class SubmitVideoContent extends StatelessWidget {
+  const SubmitVideoContent({super.key});
+  // This is the content on the Submit Video page
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ClassifyVideoPage()));
+      },
+      child: Container(
+        height: 64,
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromARGB(255, 56, 92, 15),
+        ),
+        child: const Center(
+          child: Text('Click here to classify video',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        ),
+      ),
+    );
+  }
+}
+
+class ClassifyVideoPage extends StatelessWidget {
+  const ClassifyVideoPage({super.key});
+  // This is the page that lets the user submit the video to be classified.
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: <Widget>[
+          TitleBar(),
+          Text('Classifying video...'),
+          Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: BottomButtonRow()))),
+        ],
+      ),
     );
   }
 }
