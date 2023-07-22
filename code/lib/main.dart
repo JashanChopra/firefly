@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'collections.dart';
 
 void main() {
   runApp(const MyApp());
@@ -112,6 +113,15 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CollectionPage()),
+                  );
+                },
+                child: const Text('Go to New Page')),
           ],
         ),
       ),
